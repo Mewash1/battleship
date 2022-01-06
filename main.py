@@ -1,4 +1,5 @@
 import sys, pygame
+import board_creation
 import constants
 
 def main():
@@ -25,7 +26,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN: sys.exit()
+                if event.key == pygame.K_RETURN: board_creation.main_board_creation(screen)
 
 
 if __name__ == "__main__":
