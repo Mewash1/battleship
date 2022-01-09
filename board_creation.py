@@ -54,21 +54,7 @@ def drawgrid(w, surface):
         pygame.draw.line(surface, (255, 255, 255), (x, 0), (x, w), 4)
         pygame.draw.line(surface, (255, 255, 255), (0, y), (w, y), 4)
 
-class Cube:
-    def update(self, sizebtwn):
-        x, y = pygame.mouse.get_pos()
-        x, y = x - constants.FIRST_BOARD_POS[0], y - constants.FIRST_BOARD_POS[1]
-        ix = x // sizebtwn
-        iy = y // sizebtwn
-        self.cx, self.cy = ix * sizebtwn, iy * sizebtwn
-        self.square = pygame.Rect(self.cx, self.cy, sizebtwn, sizebtwn)
-    def draw(self, surface):
-        pygame.draw.rect(surface, (255, 255, 255), self.square)
-    def draw_at_point(self, surface, point):
-        pygame.draw.rect(surface, (255, 255, 255), point)
-    def remove(self, surface):
-        pygame.draw.rect(surface, constants.BACKGROUND, self.square)
-    
+
 
 def main_board_creation(screen):
     screen.fill(constants.BACKGROUND)
@@ -99,6 +85,7 @@ def main_board_creation(screen):
                 if selection[1].collidepoint((mx, my)):
                     pass
         if right_click:
+            cube.remove(surface)
             pass
         draw_menu(menu, screen)
         cube.update(surface.get_width() // 10)

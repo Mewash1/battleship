@@ -12,3 +12,6 @@ Jak ma wyglądać kliknięcie:
     3. ustawić zmienną wyboru tak, żeby wskazywała na odpowiedni rodzaj okrętu
 - jeżeli jest to kliknięcie na przycisk rotate, to program musi:
     1. sprawdzić jaki typ okrętu jest wybrany
+    2. za pomocą słownika zmienić typ statku
+- jeżeli jest to kliknięcie na przycisk submit, to program musi:
+    1. sprawdzić czy ten przycisk może być kliknięty
