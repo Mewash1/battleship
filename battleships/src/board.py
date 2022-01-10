@@ -3,19 +3,18 @@ import src.constants
 
 
 class Board:
-    def __init__(self, board_size, board_pos, screen_w, screen_h) -> None:
+    def __init__(self, board_size, board_pos) -> None:
         self.board_size = board_size
         self.surface = pygame.Surface(board_size)
+        self.surface.fill(src.constants.BACKGROUND)
         self.board_pos = board_pos
-        self.screen_w = screen_w
-        self.screen_h = screen_h
+        self.square_size = self.board_size[0] // 10 
     
     def draw_board(self):
-        square_size = self.screen_w // 10 
-        for i in range(0, self.screen_w + 1, square_size):
+        for i in range(0, self.board_size[0] + 1, self.square_size):
             x, y = i, i
-            pygame.draw.line(self.surface, (255, 255, 255), (x, 0), (x, self.screen_w), 4)
-            pygame.draw.line(self.surface, (255, 255, 255), (0, y), (self.screen_w, y), 4)
+            pygame.draw.line(self.surface, (255, 255, 255), (x, 0), (x, self.board_size[0]), 4)
+            pygame.draw.line(self.surface, (255, 255, 255), (0, y), (self.board_size[0], y), 4)
 
     def draw_ship(self, ship_type):
         ship_type.draw()
@@ -54,10 +53,12 @@ class Button:
 
     def update(self):
         if self.is_clicked:
-            self.current_picture = self.clicked_picture
+            self.current_picture = pygame.image.load(self.clicked_picture).convert()
         else:
-            self.current_picture = self.picture
+            self.current_picture = pygame.image.load(self.picture).convert()
         self.rect = self.current_picture.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y
 
 
 class SelectionButton(Button):
@@ -93,6 +94,7 @@ class Square:
         iy = y // self.square_size
         self.cx, self.cy = ix * self.square_size, iy * self.square_size
         self.square = pygame.Rect(self.cx, self.cy, self.height, self.width)
+        print(self.cx/35, self.cy/35)
 
     def draw(self, surface):
         pygame.draw.rect(surface, (255, 255, 255), self.square)
