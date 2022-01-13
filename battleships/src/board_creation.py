@@ -1,9 +1,11 @@
+from ast import Index
 from src import board
 import pygame
 import src.constants
 import numpy as np
 import sys
 from src.board import Board, SelectionButton, RotateButton, ShipsText, Square
+from src.check_placement import check_good_ship_placement, check_length
 
 
 def create_ship_buttons(texts):
@@ -24,43 +26,6 @@ def create_text(board):
     return text4, text3, text2, text1
 
 
-def create_ships(board: Board, choice):
-    '''
-    Creates Square objects representing ships in game. Each ship has a number assigned to it, so that
-    the game knows what to draw on the board. Numbers from 1 to 4 are assigned to horizontal ships (eg. 1 means horizontal one-square ship).
-    Numbers from 5 to 8 are assgined to vertical ships.
-    '''
-    if choice == 1:
-        return Square(board.square_size, 1, 1)
-    if choice == 2:
-        return Square(board.square_size, 2, 1)
-    if choice == 3:
-        return Square(board.square_size, 3, 1)
-    if choice == 4:
-        return Square(board.square_size, 4, 1)
-    if choice == 5:
-        return Square(board.square_size, 1, 1)
-    if choice == 6:
-        return Square(board.square_size, 1, 2)
-    if choice == 7:
-        return Square(board.square_size, 1, 3)
-    if choice == 8:
-        return Square(board.square_size, 1, 4)
-    
-    '''
-    one_h = Square(board.square_size, 1, 1)
-    two_h = Square(board.square_size, 2, 1)
-    three_h = Square(board.square_size, 3, 1)
-    four_h = Square(board.square_size, 4, 1)
-
-    one_v = Square(board.square_size, 1, 1)
-    two_v = Square(board.square_size, 1, 2)
-    three_v = Square(board.square_size, 1, 3)
-    four_v = Square(board.square_size, 1, 4)
-
-    return one_h, two_h, three_h, four_h, one_v, two_v, three_v, four_v
-    '''
-
 def draw_menu(screen, texts, board, selection_buttons):
     board.draw_board()
     screen.blit(board.surface, board.board_pos)
@@ -73,97 +38,13 @@ def draw_menu(screen, texts, board, selection_buttons):
 def update(board_pos, board_size, square_size):
     x, y = pygame.mouse.get_pos()
     x, y = x - board_pos[0], y - board_pos[1]
-    ix = x // square_size
-    iy = y // square_size
-    cx, cy = ix * square_size, iy * square_size
+    grid_x = x // square_size
+    grid_y = y // square_size
+    cx, cy = grid_x * square_size, grid_y * square_size
     return int(cx/(board_size[0]//10)), int(cy/(board_size[0]//10)), cx, cy
 
 
-def check_for_ships_around_point(cy, cx, array):
-    print(cx, cy)
-    if array[cx][cy] != 0:
-        return False
-    try:
-        if array[cx - 1][cy] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cx + 1][cy] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cx][cy - 1] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cx][cy + 1] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cx - 1][cy - 1] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cx + 1][cy + 1] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cx - 1][cy + 1] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cx + 1][cy - 1] != 0:
-            return False
-    except IndexError:
-        pass
-    return True
-
-    
-
-
-def check_good_ship_placement(choice, cx, cy, array):
-    if choice in {1, 2, 3, 4}:
-        for y in range(choice):
-            if not check_for_ships_around_point(cx, cy + y, array):
-                return False
-    elif choice in {5, 6, 7, 8}:
-        for x in range(choice - 4):
-            if not check_for_ships_around_point(cx + x, cy, array):
-                return False
-    return True
-
-
-
-
-def check_length(choice, array, cy, cx):
-    if choice == 1 or choice == 5:
-        return True
-    else:
-        if choice in {2, 3, 4}:
-            for x in range(choice):
-                try:
-                    if array[cx][cy + x] != 0:
-                        return False
-                except IndexError:
-                    return False
-        elif choice in {6, 7, 8}:
-            for y in range(choice - 4):
-                try:
-                    if array[cx + y][cy] != 0:
-                        return False
-                except IndexError:
-                    return False
-        return True
-
-
-def draw_ship(choice, cy, cx, array, surface, square_size, ix, iy):
+def draw_ship(choice, cx, cy, array, surface, square_size, grid_x, grid_y):
     choice_dict = {
         1: (1, 1),
         2: (2, 1),
@@ -176,37 +57,125 @@ def draw_ship(choice, cy, cx, array, surface, square_size, ix, iy):
     }
     height = square_size * choice_dict[choice][0]
     width = square_size * choice_dict[choice][1]
-    new_ship = pygame.Rect(ix, iy, height, width)
+    new_ship = pygame.Rect(grid_x, grid_y, height, width)
     pygame.draw.rect(surface, (255, 255, 255), new_ship)
 
     if choice > 4:
         for y in range(choice - 4):
-            array[cx + y][cy] = 1
+            array[cy + y][cx] = 1
     else:
         for x in range(choice):
-            array[cx][cy + x] = 1
+            array[cy][cx + x] = 1
 
 
-def main_board_creation(screen):
+def remove_rect(grid_y, grid_x, square_size, surface):
+    new_ship = pygame.Rect(grid_x, grid_y, square_size, square_size)
+    pygame.draw.rect(surface, src.constants.BACKGROUND, new_ship)
+
+
+def remove_ship(array, cx, cy, square_size, surface):
+    direction = 0
+    try:
+        if array[cy - 1][cx] == 1: 
+            direction = 1
+    except IndexError:
+        pass
+
+    try:
+        if array[cy + 1][cx] == 1: 
+            direction = 1
+    except IndexError:
+        pass
+
+    try:
+        if array[cy][cx + 1] == 1:
+            direction = 2
+    except IndexError:
+        pass
+
+    try:
+        if array[cy][cx - 1] == 1:
+            direction = 2
+    except IndexError:
+        pass
+
+
+    if direction == 0:
+        remove_rect(cy*square_size, cx*square_size, square_size, surface)
+        array[cy][cx] = 0
+
+    if direction == 1:
+        y = 0
+        while True:
+            try:
+                if array[cy - y][cx] == 1:
+                    remove_rect((cy - y) * square_size, cx * square_size, square_size, surface)
+                    array[cy - y][cx] = 0
+                else:
+                    break
+            except IndexError:
+                break
+            y += 1
+
+        y = 1
+        while True:
+            try:
+                if array[cy + y][cx] == 1:
+                    remove_rect((cy + y) * square_size, cx * square_size, square_size, surface)
+                    array[cy + y][cx] = 0
+                else:
+                    break
+            except IndexError:
+                break
+            y += 1
+
+    if direction == 2:
+        x = 0
+        while True:
+            try:
+                if array[cy][cx + x] == 1:
+                    remove_rect(cy * square_size, (cx + x) * square_size, square_size, surface)
+                    array[cy][cx + x] = 0
+                else:
+                    break
+            except IndexError:
+                break
+            x += 1
+
+        x = 1
+        while True:
+            try:
+                if array[cy][cx - x] == 1:
+                    remove_rect(cy * square_size, (cx - x) * square_size, square_size, surface)
+                    array[cy][cx - x] = 0
+                else:
+                    break
+            except IndexError:
+                break
+            x += 1
+
+
+def main_board_creation(screen, array=np.zeros((10, 10), dtype=int)):
     screen.fill(src.constants.BACKGROUND)
     board = Board(src.constants.BOARD_SIZE, src.constants.BOARD_POS)
     texts = create_text(board)
     selection_buttons = create_ship_buttons(texts)
-    ships = []
-    array = np.zeros((10, 10), dtype=int)
     run = True
-    choice = 2
+    choice = 3
     while run:
         draw_menu(screen, texts, board, selection_buttons)
-        cy, cx, ix, iy = update(board.board_pos, board.board_size, board.square_size)
+        cx, cy, grid_x, grid_y = update(board.board_pos, board.board_size, board.square_size)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 if (cy >= 0 and cy <= 9) and (cx >= 0 and cx <= 9):
-                    if check_good_ship_placement(choice, cy, cx, array):
-                        draw_ship(choice, cy, cx, array, board.surface, board.square_size, ix, iy)
-                        print(array)
+                    if check_good_ship_placement(choice, cx, cy, array) and check_length(choice, array, cx, cy):
+                        draw_ship(choice, cx, cy, array, board.surface, board.square_size, grid_x, grid_y)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
-                pass
+                if (cy >= 0 and cy <= 9) and (cx >= 0 and cx <= 9):
+                    if array[cy][cx] != 0:
+                        print(cx, cy)
+                        print(grid_x, grid_y)
+                        remove_ship(array, cx, cy, board.square_size, board.surface)
         pygame.display.flip()
