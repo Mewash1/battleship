@@ -8,7 +8,7 @@ class Board:
         self.surface = pygame.Surface(board_size)
         self.surface.fill(src.constants.BACKGROUND)
         self.board_pos = board_pos
-        self.square_size = self.board_size[0] // 10 
+        self.square_size = self.board_size[0] // 10
     
     def draw_board(self):
         for i in range(0, self.board_size[0] + 1, self.square_size):
@@ -36,7 +36,10 @@ class ShipsText:
         self.value = new_value
         self.text = src.constants.FONT.render(f"{self.value}x", True, src.constants.BLACK)
         self.rect = self.text.get_rect()
+        self.rect.x, self.rect.y = self.x, self.y
     
+    def erase(self):
+        self.text = src.constants.FONT.render(f"{self.value}x", True, src.constants.BACKGROUND)
 
 class Button:
     def __init__(self, picture, x, y, is_clickable, is_clicked, clicked_picture) -> None:
@@ -87,19 +90,22 @@ class Square:
         self.width = square_size * width_factor
         self.square_size = square_size
 
-    def update(self, board_pos):
+    def update(self, board_pos, board_size):
         x, y = pygame.mouse.get_pos()
         x, y = x - board_pos[0], y - board_pos[1]
         ix = x // self.square_size
         iy = y // self.square_size
         self.cx, self.cy = ix * self.square_size, iy * self.square_size
         self.square = pygame.Rect(self.cx, self.cy, self.height, self.width)
-        print(self.cx/35, self.cy/35)
 
     def draw(self, surface):
         pygame.draw.rect(surface, (255, 255, 255), self.square)
+        self.drawn_ship = self.square
 
     def remove(self, surface):
-        pygame.draw.rect(surface, src.constants.BACKGROUND, self.square)
+        pygame.draw.rect(surface, src.constants.BACKGROUND, self.drawn_ship)
     
-    
+
+class Ship:
+    def __init__(self, square_size, height_factor, width_factor):
+        pass

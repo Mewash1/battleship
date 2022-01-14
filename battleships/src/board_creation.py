@@ -103,7 +103,9 @@ def remove_ship(array, cx, cy, square_size, surface):
     if direction == 0:
         remove_rect(cy*square_size, cx*square_size, square_size, surface)
         array[cy][cx] = 0
+        return 1
 
+    square_counter = 0
     if direction == 1:
         y = 0
         while True:
@@ -111,6 +113,7 @@ def remove_ship(array, cx, cy, square_size, surface):
                 if array[cy - y][cx] == 1:
                     remove_rect((cy - y) * square_size, cx * square_size, square_size, surface)
                     array[cy - y][cx] = 0
+                    square_counter += 1
                 else:
                     break
             except IndexError:
@@ -123,6 +126,7 @@ def remove_ship(array, cx, cy, square_size, surface):
                 if array[cy + y][cx] == 1:
                     remove_rect((cy + y) * square_size, cx * square_size, square_size, surface)
                     array[cy + y][cx] = 0
+                    square_counter += 1
                 else:
                     break
             except IndexError:
@@ -136,6 +140,7 @@ def remove_ship(array, cx, cy, square_size, surface):
                 if array[cy][cx + x] == 1:
                     remove_rect(cy * square_size, (cx + x) * square_size, square_size, surface)
                     array[cy][cx + x] = 0
+                    square_counter += 1
                 else:
                     break
             except IndexError:
@@ -148,12 +153,13 @@ def remove_ship(array, cx, cy, square_size, surface):
                 if array[cy][cx - x] == 1:
                     remove_rect(cy * square_size, (cx - x) * square_size, square_size, surface)
                     array[cy][cx - x] = 0
+                    square_counter += 1
                 else:
                     break
             except IndexError:
                 break
             x += 1
-
+        return square_counter
 
 def main_board_creation(screen, array=np.zeros((10, 10), dtype=int)):
     screen.fill(src.constants.BACKGROUND)
@@ -161,21 +167,39 @@ def main_board_creation(screen, array=np.zeros((10, 10), dtype=int)):
     texts = create_text(board)
     selection_buttons = create_ship_buttons(texts)
     run = True
-    choice = 3
+    choice = 0
+    texts_dict = {1: 3, 2: 2, 3: 1, 4: 0, 5: 3, 6: 2, 7: 1, 8: 0}
     while run:
         draw_menu(screen, texts, board, selection_buttons)
+        x, y = pygame.mouse.get_pos()
         cx, cy, grid_x, grid_y = update(board.board_pos, board.board_size, board.square_size)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                if (cy >= 0 and cy <= 9) and (cx >= 0 and cx <= 9):
+                if (cy >= 0 and cy <= 9) and (cx >= 0 and cx <= 9) and choice != 0:
                     if check_good_ship_placement(choice, cx, cy, array) and check_length(choice, array, cx, cy):
-                        draw_ship(choice, cx, cy, array, board.surface, board.square_size, grid_x, grid_y)
+                        if texts[texts_dict[choice]].value != 0:
+                            draw_ship(choice, cx, cy, array, board.surface, board.square_size, grid_x, grid_y)
+                            text_rect = pygame.Rect(texts[texts_dict[choice]].x, texts[texts_dict[choice]].y, 50, 50)
+                            pygame.draw.rect(screen, src.constants.BACKGROUND, text_rect)
+                            texts[texts_dict[choice]].update(texts[texts_dict[choice]].value - 1)
+                for button in selection_buttons:
+                    collide = button.rect.collidepoint((x, y))
+                    if collide:
+                        for other_button in selection_buttons:
+                            other_button.is_clicked = False
+                            other_button.update()
+                        button.is_clicked = True
+                        button.update()
+                        choice = button.ship_type
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 if (cy >= 0 and cy <= 9) and (cx >= 0 and cx <= 9):
                     if array[cy][cx] != 0:
                         print(cx, cy)
                         print(grid_x, grid_y)
-                        remove_ship(array, cx, cy, board.square_size, board.surface)
+                        ship_type = remove_ship(array, cx, cy, board.square_size, board.surface)
+                        text_rect = pygame.Rect(texts[texts_dict[ship_type]].x, texts[texts_dict[ship_type]].y, 50, 50)
+                        pygame.draw.rect(screen, src.constants.BACKGROUND, text_rect)
+                        texts[texts_dict[ship_type]].update(texts[texts_dict[ship_type]].value + 1)
         pygame.display.flip()
