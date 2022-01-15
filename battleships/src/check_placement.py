@@ -1,16 +1,11 @@
-from ast import Index
-import numpy
-
-
 def check_for_ships_around_point(cx, cy, array):
-    print(cx, cy)
     try:
         if array[cy][cx] != 0:
             return False
     except IndexError:
         pass
     try:
-        if array[cy - 1][cx] != 0:
+        if array[cy - 1][cx] != 0 and cy != 0: 
             return False
     except IndexError:
         pass
@@ -20,7 +15,7 @@ def check_for_ships_around_point(cx, cy, array):
     except IndexError:
         pass
     try:
-        if array[cy][cx - 1] != 0:
+        if array[cy][cx - 1] != 0 and cx != 0:
             return False
     except IndexError:
         pass
@@ -30,7 +25,7 @@ def check_for_ships_around_point(cx, cy, array):
     except IndexError:
         pass
     try:
-        if array[cy - 1][cx - 1] != 0:
+        if array[cy - 1][cx - 1] != 0 and cy != 0 and cx != 0:
             return False
     except IndexError:
         pass
@@ -40,12 +35,12 @@ def check_for_ships_around_point(cx, cy, array):
     except IndexError:
         pass
     try:
-        if array[cy - 1][cx + 1] != 0:
+        if array[cy - 1][cx + 1] != 0 and cy != 0:
             return False
     except IndexError:
         pass
     try:
-        if array[cy + 1][cx - 1] != 0:
+        if array[cy + 1][cx - 1] != 0 and cx != 0:
             return False
     except IndexError:
         pass
