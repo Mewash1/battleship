@@ -1,4 +1,5 @@
 import pygame
+from .third_screen import main_third_screen
 from .constants import BACKGROUND, BOARD_POS, BOARD_SIZE
 import numpy as np
 import sys
@@ -7,20 +8,7 @@ from .classes.Board import Board
 from .draw_objects import draw_menu, draw_ship
 from .array_methods import remove_ship, update_array
 from .create_objects import create_submit_button, create_rotate_button, create_ship_buttons, create_text
-
-
-def update(board_pos, board_size, square_size):
-    '''
-    Returns the coordinates of mouse in terms of board. Each cell has a specific coordinate (eg. top-right corner is (0, 9))\n
-    By getting the coords like this it's then very easy to search the board array for necessary values.\n
-    The function also returns the coords without dividing them by the size of the cell. It's useful for drawing.
-    '''
-    x, y = pygame.mouse.get_pos()
-    x, y = x - board_pos[0], y - board_pos[1]
-    grid_x = x // square_size
-    grid_y = y // square_size
-    cx, cy = grid_x * square_size, grid_y * square_size
-    return int(cx/(board_size[0]//10)), int(cy/(board_size[0]//10)), cx, cy
+from .array_methods import update
 
 
 def check_draw_submit(texts):
@@ -122,8 +110,10 @@ def main_second_screen(screen, array=np.zeros((10, 10), dtype=int)):
                 if rotate_button.rect.collidepoint((x, y)):
                     rotate_button, choice = use_rotation(rotate_button, choice)
 
+                # note: only for debugging!
+                submit_button.is_clickable = True
                 if submit_button.rect.collidepoint((x, y)) and submit_button.is_clickable:
-                    sys.exit()
+                    main_third_screen(screen, array)
 
                 selection_buttons, rotate_button, choice = selection_button_click(selection_buttons, rotate_button, x, y, choice)
 

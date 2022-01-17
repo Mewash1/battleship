@@ -4,11 +4,15 @@ pygame.init()
 SIZE = WIDTH, HEIGHT = 1072, 603
 BACKGROUND = 242, 216, 186
 BLACK = 0, 0, 0
+BLUE = 19, 130, 214
+RED = 214, 19, 19
 FONT = pygame.font.SysFont('calibri', 32)
 CLOCK = pygame.time.Clock()
 BATTLESHIP = "battleships/data/battleships.jpg"
 BOARD_SIZE = (350, 350)
 BOARD_POS = (200, HEIGHT/2 - BOARD_SIZE[0]/2)
+PLAYER_BOARD_POS = (100, HEIGHT/2 - BOARD_SIZE[0]/2)
+ENEMY_BOARD_POS = (PLAYER_BOARD_POS[0] + 550, HEIGHT/2 - BOARD_SIZE[0]/2)
 TEXT_POS = (700, HEIGHT/2 - BOARD_SIZE[0]/2)
 FOUR_BUTTON = "battleships/data/four_square.jpg"
 THREE_BUTTON = "battleships/data/three_square.jpg"
