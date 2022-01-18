@@ -6,7 +6,7 @@ import sys
 from .check_placement import check_good_ship_placement, check_length
 from .classes.Board import Board
 from .draw_objects import draw_menu, draw_ship
-from .array_methods import kombajn, remove_ship, update_array
+from .array_methods import kombajn, update_array
 from .create_objects import create_submit_button, create_rotate_button, create_ship_buttons, create_text
 from .array_methods import update
 

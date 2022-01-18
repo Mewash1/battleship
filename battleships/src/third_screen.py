@@ -2,7 +2,7 @@ from random import randint, random
 from .constants import BACKGROUND, BOARD_SIZE, ENEMY_BOARD_POS, PLAYER_BOARD_POS, BLUE, RED
 from .classes.Board import Board
 from .draw_objects import draw_ship
-from .array_methods import check_if_ship, generate_ship_array, kombajn, turn_area_around_ship_blue, update
+from .array_methods import generate_ship_array, kombajn, update
 import pygame
 import sys
 import numpy as np
@@ -35,16 +35,22 @@ def choose_a_random_point(player_array):
             return ex, ey
 
 
-def enemy_turn(player_array, player_board, enemy_set=None, enemy_array=None):
-    ex, ey = choose_a_random_point(player_array)
+def enemy_turn(player_array, player_board, coords):
+    print(coords)
+    if len(coords) == 0:
+        ex, ey = choose_a_random_point(player_array)
+    else:
+        ey, ex = coords[0][0], coords[0][1]
     if player_array[ey][ex] == 0:
         draw_ship(1, player_board.surface, player_board.square_size, ex * player_board.square_size, ey * player_board.square_size, color=BLUE)
         player_array[ey][ex] = 3
     elif player_array[ey][ex] == 1:
         draw_ship(1, player_board.surface, player_board.square_size, ex * player_board.square_size, ey * player_board.square_size, color=RED)
         player_array[ey][ex] = 2
+        coords = kombajn(player_array, ex, ey, player_board.square_size, player_board.surface, False, False)[2]
         if not kombajn(player_array, ex, ey, player_board.square_size, player_board.surface, False, False)[1]:
             kombajn(player_array, ex, ey, player_board.square_size, player_board.surface, True, False)
+    return coords
 
 
 
@@ -55,6 +61,7 @@ def main_third_screen(screen, player_array):
     enemy_board = Board(BOARD_SIZE, ENEMY_BOARD_POS)
     enemy_array = generate_ship_array()
     enemy_set = set()
+    coords = []
     '''
     enemy_array = np.zeros((10, 10), dtype=int)
     enemy_array[0][0], enemy_array[0][1], enemy_array[0][2] = 2, 2, 2
@@ -74,13 +81,13 @@ def main_third_screen(screen, player_array):
                     if enemy_array[cy][cx] == 0:
                         draw_ship(1, enemy_board.surface, enemy_board.square_size, grid_x, grid_y, color=BLUE)
                         enemy_array[cy][cx] = 3
-                        enemy_turn(player_array, player_board, enemy_set, enemy_array)
+                        coords = enemy_turn(player_array, player_board, coords)
                     elif enemy_array[cy][cx] == 1:
                         draw_ship(1, enemy_board.surface, enemy_board.square_size, grid_x, grid_y, color=RED)
                         enemy_array[cy][cx] = 2
-                        if not check_if_ship(enemy_array, cx, cy):
+                        if not kombajn(enemy_array, cx, cy, enemy_board.square_size, enemy_board.surface, False, False)[1]:
                             kombajn(enemy_array, cx, cy, enemy_board.square_size, enemy_board.surface, True, False)
-                        enemy_turn(player_array, player_board)
+                        coords = enemy_turn(player_array, player_board, coords)
 
                         
         pygame.display.flip()
