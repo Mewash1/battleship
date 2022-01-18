@@ -111,7 +111,6 @@ def remove_ship(array, cx, cy, square_size, surface):
     return square_counter
 
 
-
 def check_if_ship(array, cx, cy):
     check = False
     direction = get_direction(array, cx, cy)
@@ -224,6 +223,113 @@ def turn_area_around_ship_blue(array, cx, cy, surface, square_size):
                     break
             except IndexError:
                 break
+
+
+def kombajn(array, cx, cy, square_size, surface, check_or_color, check_if_remove):
+    check = False
+    direction = get_direction(array, cx, cy)
+    if direction == 0:
+        if array[cy][cx] == 1:
+            remove_rect(cy*square_size, cx*square_size, square_size, surface)
+            array[cy][cx] = 0
+            return 1, None
+        elif array[cy][cx] == 2:
+            if check_or_color:
+                turn_squares_blue_around_point(cx, cy, array, surface, square_size)
+                return None, None
+            else:
+                return None, False
+            
+
+    square_counter = 1
+    if check_if_remove:
+        remove_rect(cy*square_size, cx*square_size, square_size, surface)
+        array[cy][cx] = 0
+    if check_or_color:
+        turn_squares_blue_around_point(cx, cy, array, surface, square_size)
+    if direction == 1:
+        y = 1
+        while True:
+            try:
+                if array[cy - y][cx] == 1 and cy != 0:
+                    if check_if_remove:
+                        remove_rect((cy - y) * square_size, cx * square_size, square_size, surface)
+                        array[cy - y][cx] = 0
+                        square_counter += 1
+                    y += 1
+                    check = True
+                elif array[cy - y][cx] == 2 and cy - y != 0:
+                    if check_or_color:
+                        turn_squares_blue_around_point(cx, cy - y, array, surface, square_size)
+                    y += 1
+                    continue
+                else:
+                    break
+            except IndexError:
+                break
+
+        y = 1
+        while True:
+            try:
+                if array[cy + y][cx] == 1:
+                    if check_if_remove:
+                        remove_rect((cy + y) * square_size, cx * square_size, square_size, surface)
+                        array[cy + y][cx] = 0
+                        square_counter += 1
+                    y += 1
+                    check = True
+                elif array[cy + y][cx] == 2:
+                    if check_or_color:
+                        turn_squares_blue_around_point(cx, cy + y, array, surface, square_size)
+                    y += 1
+                else:
+                    break
+            except IndexError:
+                break
+            
+
+    if direction == 2:
+        x = 1
+        while True:
+            try:
+                if array[cy][cx + x] == 1:
+                    if check_if_remove:
+                        remove_rect(cy * square_size, (cx + x) * square_size, square_size, surface)
+                        array[cy][cx + x] = 0
+                        square_counter += 1
+                    x += 1
+                    check = True
+                elif array[cy][cx + x] == 2:
+                    if check_or_color:
+                        turn_squares_blue_around_point(cx + x, cy, array, surface, square_size)
+                    x += 1
+                else:
+                    break
+            except IndexError:
+                break
+            
+
+        x = 1
+        while True:
+            try:
+                if array[cy][cx - x] == 1:
+                    if check_if_remove:
+                        remove_rect(cy * square_size, (cx - x) * square_size, square_size, surface)
+                        array[cy][cx - x] = 0
+                        square_counter += 1
+                    x += 1
+                    check = True
+                elif array[cy][cx - x] == 2:
+                    if check_or_color:
+                        turn_squares_blue_around_point(cx - x, cy, array, surface, square_size)
+                    x += 1
+                else:
+                    break
+            except IndexError:
+                break
+            
+    
+    return square_counter, check
 
 
 def update_array(choice, cx, cy, array):

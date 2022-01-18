@@ -6,7 +6,7 @@ import sys
 from .check_placement import check_good_ship_placement, check_length
 from .classes.Board import Board
 from .draw_objects import draw_menu, draw_ship
-from .array_methods import remove_ship, update_array
+from .array_methods import kombajn, remove_ship, update_array
 from .create_objects import create_submit_button, create_rotate_button, create_ship_buttons, create_text
 from .array_methods import update
 
@@ -73,7 +73,8 @@ def right_click(cx, cy, array, board, texts, texts_dict, screen):
     '''
     Removes the clicked ship, updates the text beside the button and updates the array.
     '''
-    ship_type = remove_ship(array, cx, cy, board.square_size, board.surface)
+    ship_type = kombajn(array, cx, cy, board.square_size, board.surface, False, True)[0]
+    print(ship_type)
     text_rect = pygame.Rect(texts[texts_dict[ship_type]].x, texts[texts_dict[ship_type]].y, 50, 50)
     pygame.draw.rect(screen, BACKGROUND, text_rect)
     texts[texts_dict[ship_type]].update(texts[texts_dict[ship_type]].value + 1)
