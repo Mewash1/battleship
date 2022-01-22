@@ -1,49 +1,11 @@
 def check_for_ships_around_point(cx, cy, array):
-    try:
-        if array[cy][cx] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cy - 1][cx] != 0 and cy != 0: 
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cy + 1][cx] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cy][cx - 1] != 0 and cx != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cy][cx + 1] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cy - 1][cx - 1] != 0 and cy != 0 and cx != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cy + 1][cx + 1] != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cy - 1][cx + 1] != 0 and cy != 0:
-            return False
-    except IndexError:
-        pass
-    try:
-        if array[cy + 1][cx - 1] != 0 and cx != 0:
-            return False
-    except IndexError:
-        pass
+    for y in range(-1, 2):
+        for x in range(-1, 2):
+            try:
+                if array[cy + y][cx + x] != 0 and cy + y >= 0 and cx + x >= 0:
+                    return False
+            except IndexError:
+                pass
     return True
 
 

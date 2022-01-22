@@ -52,7 +52,6 @@ def choose_a_random_point(player_array):
 
 
 def enemy_turn(player_array, player_board, coords):
-    print(coords)
     if coords is None:
         coords = []
     while len(coords) != 0:
@@ -162,7 +161,6 @@ def check_win_condition(screen, enemy_array, player_array):
 
 
 def main_third_screen(screen, player_array):
-    print(player_array)
     screen.fill(BACKGROUND)
     player_board = Board(BOARD_SIZE, PLAYER_BOARD_POS)
     enemy_board = Board(BOARD_SIZE, ENEMY_BOARD_POS)
@@ -227,5 +225,6 @@ def main_third_screen(screen, player_array):
                                 False,
                             )
                         coords = enemy_turn(player_array, player_board, coords)
+                    print(enemy_array)
 
         pygame.display.flip()
