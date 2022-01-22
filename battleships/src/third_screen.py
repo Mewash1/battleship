@@ -1,4 +1,4 @@
-from random import randint
+import random
 from .constants import (
     BACKGROUND,
     BLACK,
@@ -16,6 +16,8 @@ from .array_methods import generate_ship_array, kombajn, update
 import pygame
 import sys
 import numpy as np
+import pytest
+from .enemy_moves import gen_enemy_moves
 
 
 def recreate_board(player_array, surface, square_size, color=(255, 255, 255)):
@@ -43,19 +45,25 @@ def draw_two_boards(player_board, enemy_board, player_array, enemy_array, screen
 
 def choose_a_random_point(player_array):
     while True:
-        ex = randint(0, 9)
-        ey = randint(0, 9)
+        ex = random.randint(0, 9)
+        ey = random.randint(0, 9)
         if player_array[ey][ex] != 2 and player_array[ey][ex] != 3:
             return ex, ey
 
 
 def enemy_turn(player_array, player_board, coords):
+    print(coords)
     if coords is None:
         coords = []
+    while len(coords) != 0:
+        ex, ey = coords[0][0], coords[0][1]
+        if player_array[ey][ex] == 3:
+            coords = coords[1:]
+        else:
+            break
     if len(coords) == 0:
         ex, ey = choose_a_random_point(player_array)
-    else:
-        ey, ex = coords[0][0], coords[0][1]
+
     if player_array[ey][ex] == 0:
         draw_ship(
             1,
@@ -75,16 +83,12 @@ def enemy_turn(player_array, player_board, coords):
             ey * player_board.square_size,
             color=RED,
         )
+        if coords is not None:
+            if len(coords) == 0:
+                coords = gen_enemy_moves(player_array, ex, ey)
+            else:
+                coords = coords[1:]
         player_array[ey][ex] = 2
-        coords = kombajn(
-            player_array,
-            ex,
-            ey,
-            player_board.square_size,
-            player_board.surface,
-            False,
-            False,
-        )[2]
         if not kombajn(
             player_array,
             ex,
