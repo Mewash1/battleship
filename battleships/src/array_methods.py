@@ -1,8 +1,7 @@
 from .constants import BACKGROUND
 from .check_placement import (
-    check_for_ships_around_point,
     check_good_ship_placement,
-    check_length,
+    check_length
 )
 from .draw_objects import draw_ship, turn_squares_blue_around_point
 import random
@@ -12,7 +11,8 @@ import pygame
 
 def get_direction(array, cx, cy):
     """
-    Checks cells in four directions to check if
+    Checks cells in four directions to check whether the ship is horizontal or vertical.\n
+    If the ship is a single cell, it returns 0.
     """
     direction = 0
     try:
@@ -54,7 +54,10 @@ def analyze_point(
     x,
     y,
     check
-):
+): 
+    '''
+    This method works the same way as analyze_whole_ship, but it takes only one point into consideration.
+    '''
     if array[cy + y][cx + x] == 1:
         if check_if_remove:
             draw_ship(
@@ -77,6 +80,12 @@ def analyze_point(
 def kombajn(
     array, cx, cy, square_size, surface, check_if_color, check_if_remove
 ):
+    '''
+    Analyzes all cells of a given ship. It has two modes, depending on the checks value.\n
+    - if check_if_color is true, this method will draw a blue outline on the entire ship.\n
+    - if check_if_remove is true, this method will remove the entire ship.\n
+    WARNING: do NOT use both modes at once. It may cause weird and unexpected results.
+    '''
     check = False
     direction = get_direction(array, cx, cy)
     square_counter = 1
@@ -172,7 +181,6 @@ def kombajn(
                 x -= 1
         except IndexError:
             pass
-    print(check)
     return square_counter, check
 
 
@@ -191,6 +199,9 @@ def update_array(choice, cx, cy, array):
 
 
 def generate_ship_array():
+    '''
+    Generates an array with random ship placements. It's used by the computer player.
+    '''
     choice = 4
     num_of_ships = 1
     array = np.zeros((10, 10), dtype=int)

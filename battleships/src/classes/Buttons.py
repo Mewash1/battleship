@@ -2,6 +2,10 @@ import pygame
 
 
 class Button:
+    '''
+    General Button class. Every object has two pictures - for clicked state and not clicked state. \n
+    Before drawing the button onto the screen it is crucial to update it first.
+    '''
     def __init__(self, picture, x, y, is_clicked, clicked_picture) -> None:
         self.picture = picture
         self.clicked_picture = clicked_picture
@@ -24,12 +28,18 @@ class Button:
 
 
 class SelectionButton(Button):
+    '''
+    Subclass of Button. Comes with one extra variable: ship_type, that is used for displaying text correctly.
+    '''
     def __init__(self, picture, x, y, is_clicked, clicked_picture, ship_type) -> None:
         super().__init__(picture, x, y, is_clicked, clicked_picture)
         self.ship_type = ship_type
 
 
 class RotateButton(Button):
+    '''
+    Subclass of Button. It can convert horizontal ships to vertical ones and vice versa.
+    '''
     def __init__(self, picture, x, y, is_clicked, clicked_picture) -> None:
         super().__init__(picture, x, y, is_clicked, clicked_picture)
         self.rotaion_table = {1: 5, 2: 6, 3: 7, 4: 8}
@@ -44,6 +54,10 @@ class RotateButton(Button):
 
 
 class SubmitButton(Button):
+    '''
+    Subclass of Button. It can be turned on and off by modifying the is_clickable variable.\n
+    It also doesn't need a second picture.
+    '''
     def __init__(self, picture, x, y, is_clicked, clicked_picture) -> None:
         super().__init__(picture, x, y, is_clicked, clicked_picture)
         self.picture = pygame.image.load(self.picture).convert()

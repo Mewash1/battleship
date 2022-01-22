@@ -4,7 +4,7 @@ from .constants import BACKGROUND, BLUE
 
 def draw_ship(choice, surface, square_size, grid_x, grid_y, color=(255, 255, 255)):
     """
-    Draws ship on the board.
+    Draws a single square of given color on the given coordinates.
     """
     choice_dict = {
         1: (1, 1),
@@ -36,6 +36,9 @@ def draw_menu(screen, texts, board, selection_buttons, rotate_button):
 
 
 def turn_squares_blue_around_point(cx, cy, array, surface, square_size):
+    '''
+    Turns all squares that are empty into blue ones around the given point.
+    '''
     for y in range(-1, 2):
         for x in range(-1, 2):
             try:

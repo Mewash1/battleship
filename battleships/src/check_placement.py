@@ -1,4 +1,7 @@
 def check_for_ships_around_point(cx, cy, array):
+    '''
+    Checks if there are any ships around the given point.
+    '''
     for y in range(-1, 2):
         for x in range(-1, 2):
             try:
@@ -10,6 +13,10 @@ def check_for_ships_around_point(cx, cy, array):
 
 
 def check_good_ship_placement(choice, cx, cy, array):
+    '''
+    Checks if there is a ship around the given ships.\n 
+    The cx, cy coordinates refer to the leftmost or to the upmost part of the ship, depending on direction.
+    '''
     if choice in {1, 2, 3, 4}:
         for x in range(choice):
             if not check_for_ships_around_point(cx + x, cy, array):
@@ -22,6 +29,9 @@ def check_good_ship_placement(choice, cx, cy, array):
 
 
 def check_length(choice, array, cx, cy):
+    '''
+    Checks if the given ship fits on the board.
+    '''
     if choice == 1 or choice == 5:
         return True
     else:

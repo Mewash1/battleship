@@ -23,6 +23,9 @@ def check_if_empty_point(player_array, ex, ey):
 
 
 def while_condition(player_array, ex, ey):
+    '''
+    Checks the conditon for the first while loop.
+    '''
     if ex < 0 or ex > 9 or ey < 0 or ey > 9:
         return True
     if player_array[ey][ex] != 1:
@@ -32,6 +35,9 @@ def while_condition(player_array, ex, ey):
 
 
 def go_up(player_array, ex, ey, coords):
+    '''
+    Checks coordinates going up.
+    '''
     y = 0
     while check_if_point_can_be_added(player_array, ex, ey + y):
         print((ex, ey + y))
@@ -41,6 +47,9 @@ def go_up(player_array, ex, ey, coords):
 
 
 def go_down(player_array, ex, ey, coords):
+    '''
+    Checks coordinates going down.
+    '''
     y = -1
     while check_if_point_can_be_added(player_array, ex, ey + y):
         print((ex, ey + y))
@@ -50,6 +59,9 @@ def go_down(player_array, ex, ey, coords):
 
 
 def go_right(player_array, ex, ey, coords):
+    '''
+    Checks coordinates going right.
+    '''
     x = 0
     while check_if_point_can_be_added(player_array, ex + x, ey):
         print((ex + x, ey))
@@ -59,6 +71,9 @@ def go_right(player_array, ex, ey, coords):
 
 
 def go_left(player_array, ex, ey, coords):
+    '''
+    Checks coordinates going left.
+    '''
     x = -1
     while check_if_point_can_be_added(player_array, ex + x, ey):
         print((ex + x, ey))
@@ -68,6 +83,9 @@ def go_left(player_array, ex, ey, coords):
 
 
 def remove_duplicates(array):
+    '''
+    Removes duplicate entries from the list.
+    '''
     new_array = []
     new_set = set()
     for element in array:
@@ -78,6 +96,13 @@ def remove_duplicates(array):
 
 
 def gen_enemy_moves(player_array, ex, ey):
+    '''
+    By rolling a virtual dice, the game decides which moves are going to be made.\n
+    In the first step, computer looks around the given point until it hits another ship cell.\n
+    Then, it moves horizontally or vertically to find the rest of the ship.\n
+    The game has a 50% chance to move in one direction and 50% chance to move in the opposite direction.\n
+    All of the moves are recorded in a list. In the last step, duplicates and the original point are removed from the list.
+    '''
     coords = []
     possible_choices = [0, 1, 2, 3]
     original_x = ex

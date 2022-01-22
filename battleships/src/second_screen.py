@@ -57,7 +57,6 @@ def selection_button_click(selection_buttons, rotate_button, x, y, choice):
     return selection_buttons, rotate_button, choice
 
 
-
 def put_ship_down(choice, cx, cy, array, board, grid_x, grid_y, texts, texts_dict, screen):
     '''
     Draws the chosen ship, updates the text beside the button and updates the array.
@@ -74,7 +73,6 @@ def right_click(cx, cy, array, board, texts, texts_dict, screen):
     Removes the clicked ship, updates the text beside the button and updates the array.
     '''
     ship_type = kombajn(array, cx, cy, board.square_size, board.surface, False, True)[0]
-    print(ship_type)
     text_rect = pygame.Rect(texts[texts_dict[ship_type]].x, texts[texts_dict[ship_type]].y, 50, 50)
     pygame.draw.rect(screen, BACKGROUND, text_rect)
     texts[texts_dict[ship_type]].update(texts[texts_dict[ship_type]].value + 1)
