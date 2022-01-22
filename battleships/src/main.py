@@ -9,8 +9,8 @@ import pygame
 def main():
     pygame.init()
 
-    pygame.display.set_caption('Statki')
-    text = FONT.render('Wciśnij ENTER aby rozpocząć', True, BLACK)
+    pygame.display.set_caption('Battleships')
+    text = FONT.render('Press ENTER to start!', True, BLACK)
     textRect = text.get_rect()
     textRect.center = (WIDTH/2, HEIGHT/2)
     textRect.y += 100

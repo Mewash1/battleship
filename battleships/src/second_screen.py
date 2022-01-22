@@ -109,8 +109,6 @@ def main_second_screen(screen, array=np.zeros((10, 10), dtype=int)):
                 if rotate_button.rect.collidepoint((x, y)):
                     rotate_button, choice = use_rotation(rotate_button, choice)
 
-                # note: only for debugging!
-                submit_button.is_clickable = True
                 if submit_button.rect.collidepoint((x, y)) and submit_button.is_clickable:
                     main_third_screen(screen, array)
 

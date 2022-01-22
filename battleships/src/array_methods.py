@@ -102,7 +102,7 @@ def kombajn(
         else:
             return 1, False
     elif direction == 1:
-        y = 0
+        y = 1
         x = 0
         try:
             while array[cy + y][cx] == 1 or array[cy + y][cx] == 2:
@@ -143,7 +143,7 @@ def kombajn(
             pass
     elif direction == 2:
         y = 0
-        x = 0
+        x = 1
         try:
             while array[cy][cx + x] == 1 or array[cy][cx + x] == 2:
                 square_counter, check = analyze_point(

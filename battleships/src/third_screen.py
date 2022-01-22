@@ -241,7 +241,7 @@ def main_third_screen(screen, player_array):
     run = True
 
     while run:
-        draw_two_boards(player_board, enemy_board, player_array, enemy_array, screen)
+        draw_two_boards(player_board, enemy_board, player_array, screen)
         check_win_condition(screen, enemy_array, player_array)
         cx, cy, grid_x, grid_y = update(
             enemy_board.board_pos, enemy_board.board_size, enemy_board.square_size
