@@ -1,6 +1,4 @@
 import sys
-
-from .array_methods import generate_ship_array
 from .second_screen import main_second_screen
 from .constants import BLACK, WIDTH, HEIGHT, BATTLESHIP, SIZE, BACKGROUND, FONT
 import pygame
@@ -31,4 +29,3 @@ def main():
             if event.type == pygame.QUIT: sys.exit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_RETURN: main_second_screen(screen)
-                if event.key == pygame.K_a: print(generate_ship_array())  

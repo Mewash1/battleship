@@ -6,7 +6,7 @@ import sys
 from .check_placement import check_good_ship_placement, check_length
 from .classes.Board import Board
 from .draw_objects import draw_menu, draw_ship
-from .array_methods import kombajn, update_array
+from .array_methods import analyze_whole_ship, update_array
 from .create_objects import create_submit_button, create_rotate_button, create_ship_buttons, create_text
 from .array_methods import update
 
@@ -72,7 +72,7 @@ def right_click(cx, cy, array, board, texts, texts_dict, screen):
     '''
     Removes the clicked ship, updates the text beside the button and updates the array.
     '''
-    ship_type = kombajn(array, cx, cy, board.square_size, board.surface, False, True)[0]
+    ship_type = analyze_whole_ship(array, cx, cy, board.square_size, board.surface, False, True)[0]
     text_rect = pygame.Rect(texts[texts_dict[ship_type]].x, texts[texts_dict[ship_type]].y, 50, 50)
     pygame.draw.rect(screen, BACKGROUND, text_rect)
     texts[texts_dict[ship_type]].update(texts[texts_dict[ship_type]].value + 1)
@@ -103,17 +103,22 @@ def main_second_screen(screen, array=np.zeros((10, 10), dtype=int)):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
+                
             # left click
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 
+                # check if rotation was clicked
                 if rotate_button.rect.collidepoint((x, y)):
                     rotate_button, choice = use_rotation(rotate_button, choice)
 
+                # check if submit was clicked
                 if submit_button.rect.collidepoint((x, y)) and submit_button.is_clickable:
                     main_third_screen(screen, array)
 
+                # check if selection button was clicked
                 selection_buttons, rotate_button, choice = selection_button_click(selection_buttons, rotate_button, x, y, choice)
 
+                # check if ship should be placed down
                 if (cy >= 0 and cy <= 9) and (cx >= 0 and cx <= 9) and choice != 0:
                     if check_good_ship_placement(choice, cx, cy, array) and check_length(choice, array, cx, cy):
                         if texts[texts_dict[choice]].value != 0:

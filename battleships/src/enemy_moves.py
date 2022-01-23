@@ -40,7 +40,6 @@ def go_up(player_array, ex, ey, coords):
     '''
     y = 0
     while check_if_point_can_be_added(player_array, ex, ey + y):
-        print((ex, ey + y))
         coords.append((ex, ey + y))
         y += 1
     return y
@@ -52,7 +51,6 @@ def go_down(player_array, ex, ey, coords):
     '''
     y = -1
     while check_if_point_can_be_added(player_array, ex, ey + y):
-        print((ex, ey + y))
         coords.append((ex, ey + y))
         y -= 1
     return y
@@ -64,7 +62,6 @@ def go_right(player_array, ex, ey, coords):
     '''
     x = 0
     while check_if_point_can_be_added(player_array, ex + x, ey):
-        print((ex + x, ey))
         coords.append((ex + x, ey))
         x += 1
     return x
@@ -76,7 +73,6 @@ def go_left(player_array, ex, ey, coords):
     '''
     x = -1
     while check_if_point_can_be_added(player_array, ex + x, ey):
-        print((ex + x, ey))
         coords.append((ex + x, ey))
         x -= 1
     return x

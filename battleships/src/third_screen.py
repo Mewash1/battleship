@@ -12,7 +12,7 @@ from .constants import (
 )
 from .classes.Board import Board
 from .draw_objects import draw_ship
-from .array_methods import generate_ship_array, kombajn, update
+from .array_methods import generate_ship_array, analyze_whole_ship, update
 import pygame
 import sys
 import numpy as np
@@ -99,7 +99,7 @@ def enemy_turn(player_array, player_board, coords):
             else:
                 coords = coords[1:]
         player_array[ey][ex] = 2
-        if not kombajn(
+        if not analyze_whole_ship(
             player_array,
             ex,
             ey,
@@ -108,7 +108,7 @@ def enemy_turn(player_array, player_board, coords):
             False,
             False,
         )[1]:
-            kombajn(
+            analyze_whole_ship(
                 player_array,
                 ex,
                 ey,
@@ -149,7 +149,7 @@ def player_turn(cx, cy, player_array, enemy_array, player_board, coords, enemy_b
                 color=RED,
             )
             enemy_array[cy][cx] = 2
-            if not kombajn(
+            if not analyze_whole_ship(
                 enemy_array,
                 cx,
                 cy,
@@ -158,7 +158,7 @@ def player_turn(cx, cy, player_array, enemy_array, player_board, coords, enemy_b
                 False,
                 False,
             )[1]:
-                kombajn(
+                analyze_whole_ship(
                     enemy_array,
                     cx,
                     cy,

@@ -1,10 +1,10 @@
 import pygame
-from .constants import BACKGROUND, BLUE
+from .constants import BLUE
 
 
 def draw_ship(choice, surface, square_size, grid_x, grid_y, color=(255, 255, 255)):
     """
-    Draws a single square of given color on the given coordinates.
+    Draws a given ship of a given color.
     """
     choice_dict = {
         1: (1, 1),

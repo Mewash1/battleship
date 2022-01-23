@@ -77,7 +77,7 @@ def analyze_point(
     return square_counter, check
 
 
-def kombajn(
+def analyze_whole_ship(
     array, cx, cy, square_size, surface, check_if_color, check_if_remove
 ):
     '''
