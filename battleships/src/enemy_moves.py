@@ -34,9 +34,9 @@ def while_condition(player_array, ex, ey):
         return False
 
 
-def go_up(player_array, ex, ey, coords):
+def go_down(player_array, ex, ey, coords):
     '''
-    Checks coordinates going up.
+    Checks coordinates going down.
     '''
     y = 0
     while check_if_point_can_be_added(player_array, ex, ey + y):
@@ -45,9 +45,9 @@ def go_up(player_array, ex, ey, coords):
     return y
 
 
-def go_down(player_array, ex, ey, coords):
+def go_up(player_array, ex, ey, coords):
     '''
-    Checks coordinates going down.
+    Checks coordinates going up.
     '''
     y = -1
     while check_if_point_can_be_added(player_array, ex, ey + y):

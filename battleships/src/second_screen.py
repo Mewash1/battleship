@@ -35,7 +35,7 @@ def use_rotation(rotate_button, choice):
         rotate_button.update()
         if choice != 0:
             choice = choice + 4
-    return rotate_button, choice
+    return choice
 
 
 def selection_button_click(selection_buttons, rotate_button, x, y, choice):
@@ -54,7 +54,7 @@ def selection_button_click(selection_buttons, rotate_button, x, y, choice):
                     choice = button.ship_type + 4
                 else:
                     choice = button.ship_type
-    return selection_buttons, rotate_button, choice
+    return choice
 
 
 def put_ship_down(choice, cx, cy, array, board, grid_x, grid_y, texts, texts_dict, screen):
@@ -66,7 +66,7 @@ def put_ship_down(choice, cx, cy, array, board, grid_x, grid_y, texts, texts_dic
     text_rect = pygame.Rect(texts[texts_dict[choice]].x, texts[texts_dict[choice]].y, 50, 50)
     pygame.draw.rect(screen, BACKGROUND, text_rect)
     texts[texts_dict[choice]].update(texts[texts_dict[choice]].value - 1)
-                
+
 
 def right_click(cx, cy, array, board, texts, texts_dict, screen):
     '''
@@ -103,27 +103,27 @@ def main_second_screen(screen, array=np.zeros((10, 10), dtype=int)):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit()
-                
+
             # left click
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-                
+
                 # check if rotation was clicked
                 if rotate_button.rect.collidepoint((x, y)):
-                    rotate_button, choice = use_rotation(rotate_button, choice)
+                    choice = use_rotation(rotate_button, choice)
 
                 # check if submit was clicked
                 if submit_button.rect.collidepoint((x, y)) and submit_button.is_clickable:
                     main_third_screen(screen, array)
 
                 # check if selection button was clicked
-                selection_buttons, rotate_button, choice = selection_button_click(selection_buttons, rotate_button, x, y, choice)
+                choice = selection_button_click(selection_buttons, rotate_button, x, y, choice)
 
                 # check if ship should be placed down
                 if (cy >= 0 and cy <= 9) and (cx >= 0 and cx <= 9) and choice != 0:
                     if check_good_ship_placement(choice, cx, cy, array) and check_length(choice, array, cx, cy):
                         if texts[texts_dict[choice]].value != 0:
                             put_ship_down(choice, cx, cy, array, board, grid_x, grid_y, texts, texts_dict, screen)
-                
+
             # right click
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 3:
                 if (cy >= 0 and cy <= 9) and (cx >= 0 and cx <= 9):

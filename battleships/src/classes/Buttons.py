@@ -13,7 +13,7 @@ class Button:
         self.y = y
         self.is_clicked = is_clicked
         self.update()
-    
+
     def draw(self, screen):
         screen.blit(self.current_picture, self.rect)
 
@@ -46,7 +46,7 @@ class RotateButton(Button):
 
     def hori_to_verti(self, ship_type):
         return self.rotaion_table[ship_type]
-    
+
     def verti_to_hori(self, ship_type):
         for key, value in self.rotaion_table.items():
             if value == ship_type:
@@ -65,7 +65,7 @@ class SubmitButton(Button):
         self.rect.x = self.x
         self.rect.y = self.y
         self.is_clickable = False
-    
+
     def update(self):
         return None
 

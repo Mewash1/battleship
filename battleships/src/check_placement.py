@@ -14,7 +14,7 @@ def check_for_ships_around_point(cx, cy, array):
 
 def check_good_ship_placement(choice, cx, cy, array):
     '''
-    Checks if there is a ship around the given ships.\n 
+    Checks if there is a ship around the given ships.\n
     The cx, cy coordinates refer to the leftmost or to the upmost part of the ship, depending on direction.
     '''
     if choice in {1, 2, 3, 4}:

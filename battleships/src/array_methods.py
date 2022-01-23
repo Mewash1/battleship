@@ -54,7 +54,7 @@ def analyze_point(
     x,
     y,
     check
-): 
+):
     '''
     This method works the same way as analyze_whole_ship, but it takes only one point into consideration.
     '''
@@ -233,3 +233,24 @@ def update(board_pos, board_size, square_size):
     grid_y = y // square_size
     cx, cy = grid_x * square_size, grid_y * square_size
     return int(cx / (board_size[0] // 10)), int(cy / (board_size[0] // 10)), cx, cy
+
+
+def check_win_condition_for_array(array):
+    '''
+    Checks if there are any unsunken ships left on the given board.
+    '''
+    for element in np.nditer(array):
+        if element == 1:
+            return False
+    return True
+
+
+def choose_a_random_point(player_array):
+    '''
+    Chooses a random point that fits on the board and was not shot before.
+    '''
+    while True:
+        ex = random.randint(0, 9)
+        ey = random.randint(0, 9)
+        if player_array[ey][ex] != 2 and player_array[ey][ex] != 3:
+            return ex, ey

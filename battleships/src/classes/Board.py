@@ -12,7 +12,7 @@ class Board:
         self.surface.fill(BACKGROUND)
         self.board_pos = board_pos
         self.square_size = self.board_size[0] // 10
-    
+
     def draw_board(self):
         '''
         Draws the grid.

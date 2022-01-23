@@ -1,6 +1,4 @@
-from battleships.src.classes.Board import Board
-from battleships.src.second_screen import create_ship_buttons, create_text
-from battleships.src.check_placement import check_good_ship_placement, check_length
+from battleships.src.check_placement import check_good_ship_placement
 import numpy as np
 
 
@@ -61,9 +59,6 @@ def test_ships_many_spaces_under_each_other():
     )
     cy = 6
     cx = 4
-    print(array[0][0])
-    print(array[cy][cx])
-    print(array[cy][cx - 1])
     assert check_good_ship_placement(2, cx, cy, array) is True
 
 
@@ -85,3 +80,23 @@ def test_ships_across_the_board():
     cy = 0
     cx = 9
     assert check_good_ship_placement(1, cx, cy, array) is True
+
+
+def test_ships_touching_sides():
+    array = np.array(
+        [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ]
+    )
+    cy = 3
+    cx = 5
+    assert check_good_ship_placement(1, cx, cy, array) is False

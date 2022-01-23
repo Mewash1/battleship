@@ -26,6 +26,8 @@ def main():
 
     while 1:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit()
+            if event.type == pygame.QUIT:
+                sys.exit()
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN: main_second_screen(screen)
+                if event.key == pygame.K_RETURN:
+                    main_second_screen(screen)

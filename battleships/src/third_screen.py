@@ -1,60 +1,24 @@
-import random
 from .constants import (
     BACKGROUND,
-    BLACK,
     BOARD_SIZE,
     ENEMY_BOARD_POS,
-    FONT,
     PLAYER_BOARD_POS,
     BLUE,
     RED,
     WIDTH,
 )
 from .classes.Board import Board
-from .draw_objects import draw_ship
-from .array_methods import generate_ship_array, analyze_whole_ship, update
+from .draw_objects import draw_ship, show_postgame_message, draw_two_boards
+from .array_methods import (
+    generate_ship_array,
+    analyze_whole_ship,
+    update,
+    choose_a_random_point,
+    check_win_condition_for_array
+)
 import pygame
 import sys
-import numpy as np
 from .enemy_moves import gen_enemy_moves
-
-
-def recreate_board(player_array, surface, square_size, color=(255, 255, 255)):
-    '''
-    Draws all ships on player's board according to player's array.
-    '''
-    for y in range(0, 10):
-        for x in range(0, 10):
-            if player_array[y][x] == 1:
-                draw_ship(
-                    1, surface, square_size, x * square_size, y * square_size, color
-                )
-            if player_array[y][x] == 3:
-                draw_ship(
-                    1, surface, square_size, x * square_size, y * square_size, BLUE
-                )
-
-
-def draw_two_boards(player_board, enemy_board, player_array, screen):
-    '''
-    Draw both player's and enemy's board on screen.
-    '''
-    recreate_board(player_array, player_board.surface, player_board.square_size)
-    player_board.draw_board()
-    screen.blit(player_board.surface, player_board.board_pos)
-    enemy_board.draw_board()
-    screen.blit(enemy_board.surface, enemy_board.board_pos)
-
-
-def choose_a_random_point(player_array):
-    '''
-    Chooses a random point that fits on the board and was not shot before.
-    '''
-    while True:
-        ex = random.randint(0, 9)
-        ey = random.randint(0, 9)
-        if player_array[ey][ex] != 2 and player_array[ey][ex] != 3:
-            return ex, ey
 
 
 def enemy_turn(player_array, player_board, coords):
@@ -120,7 +84,6 @@ def enemy_turn(player_array, player_board, coords):
     return coords
 
 
-
 def player_turn(cx, cy, player_array, enemy_array, player_board, coords, enemy_board, grid_x, grid_y):
     '''
     Executes the player turn, and then immediately after the enemy's turn.\n
@@ -169,27 +132,6 @@ def player_turn(cx, cy, player_array, enemy_array, player_board, coords, enemy_b
                 )
             coords = enemy_turn(player_array, player_board, coords)
         return coords
-
-
-def check_win_condition_for_array(array):
-    '''
-    Checks if there are any unsunken ships left on the given board.
-    '''
-    for element in np.nditer(array):
-        if element == 1:
-            return False
-    return True
-
-
-def show_postgame_message(screen, message, x, y):
-    '''
-    Shows a given message on screen.
-    '''
-    win_text = FONT.render(message, True, BLACK)
-    win_rect = win_text.get_rect()
-    win_rect.x = x
-    win_rect.y = y
-    screen.blit(win_text, win_rect)
 
 
 def check_win_condition(screen, enemy_array, player_array):
